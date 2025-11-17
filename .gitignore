@@ -9,7 +9,6 @@ yarn.lock
 *.zip
 dist/
 build/
-build-ts/
 
 # IDE and editor files
 .vscode/
