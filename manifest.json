@@ -3,12 +3,8 @@
   "name": "GitHub PR Diff Extension",
   "version": "1.0.0",
   "description": "Adds diff icons next to commit hashes on GitHub pull request pages to quickly view diffs",
-  "permissions": [
-    "tabs"
-  ],
-  "host_permissions": [
-    "https://github.com/*"
-  ],
+  "permissions": ["tabs"],
+  "host_permissions": ["https://github.com/*"],
   "content_scripts": [
     {
       "matches": ["https://github.com/*/pull/*"],
@@ -32,4 +28,3 @@
     "128": "icons/icon-128.png"
   }
 }
-

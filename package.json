@@ -1,0 +1,14 @@
+{
+  "name": "github-pr-diff-extension",
+  "version": "1.0.0",
+  "description": "A browser extension that adds diff icons next to commit hashes on GitHub pull request pages",
+  "private": true,
+  "scripts": {
+    "check": "biome check .",
+    "check:write": "biome check --write .",
+    "format": "biome format --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4"
+  }
+}
