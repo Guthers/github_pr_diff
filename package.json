@@ -4,11 +4,16 @@
   "description": "A browser extension that adds diff icons next to commit hashes on GitHub pull request pages",
   "private": true,
   "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
     "check": "biome check .",
     "check:write": "biome check --write .",
     "format": "biome format --write ."
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4"
+    "@biomejs/biome": "^1.9.4",
+    "@types/chrome": "^0.0.268",
+    "@types/node": "^20.14.0",
+    "typescript": "^5.5.0"
   }
 }

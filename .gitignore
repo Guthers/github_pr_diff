@@ -10,6 +10,10 @@ yarn.lock
 dist/
 build/
 
+# Compiled TypeScript files (generated from src/)
+content.js
+popup.js
+
 # IDE and editor files
 .vscode/
 .idea/
