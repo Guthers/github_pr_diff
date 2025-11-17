@@ -52,3 +52,34 @@ export const createDiffIcon = (
 
   return icon;
 };
+
+// Create latest commit indicator icon
+export const createLatestCommitIcon = (commitSHA: string): HTMLSpanElement => {
+  const icon = document.createElement("span");
+  icon.className = "github-latest-icon";
+  icon.title = `Latest commit (${commitSHA.substring(0, 7)}) - no diff available`;
+  icon.innerHTML = "⭐";
+  icon.style.cssText = `
+    display: inline-block !important;
+    margin-left: 6px !important;
+    font-size: 16px !important;
+    vertical-align: middle !important;
+    opacity: 0.8 !important;
+    transition: opacity 0.2s !important;
+    line-height: 1 !important;
+    position: relative !important;
+    z-index: 1000 !important;
+  `;
+
+  icon.addEventListener("mouseenter", () => {
+    icon.style.opacity = "1";
+    icon.style.transform = "scale(1.2)";
+  });
+
+  icon.addEventListener("mouseleave", () => {
+    icon.style.opacity = "0.8";
+    icon.style.transform = "scale(1)";
+  });
+
+  return icon;
+};

@@ -2,7 +2,7 @@
 // Adds diff icons next to commit hashes on GitHub pull request pages
 
 import { findCommitHashes, getLatestCommitSHA } from "./commit-finder";
-import { createDiffIcon } from "./diff-icon";
+import { createDiffIcon, createLatestCommitIcon } from "./diff-icon";
 import { getPRInfo, isPRPage } from "./utils";
 
 // Add diff icons to commit hashes
@@ -24,8 +24,36 @@ const addDiffIcons = (): void => {
   const commitElements = findCommitHashes();
 
   commitElements.forEach(({ sha, element }) => {
-    // Skip if this is the latest commit (no diff needed)
+    // Check if this is the latest commit - add special icon
     if (sha === latestSHA) {
+      // Skip if latest commit icon already added
+      if (
+        element.nextSibling &&
+        element.nextSibling instanceof Element &&
+        element.nextSibling.classList &&
+        element.nextSibling.classList.contains("github-latest-icon")
+      ) {
+        return;
+      }
+
+      // Also check parent for existing latest icon
+      if (element.parentElement) {
+        const existingIcon = element.parentElement.querySelector(
+          `.github-latest-icon[data-commit-sha="${sha}"]`
+        );
+        if (existingIcon) {
+          return;
+        }
+      }
+
+      // Add latest commit icon
+      const icon = createLatestCommitIcon(sha);
+      icon.setAttribute("data-commit-sha", sha);
+
+      // Insert after the element
+      if (element.parentElement) {
+        element.parentElement.insertBefore(icon, element.nextSibling);
+      }
       return;
     }
 
