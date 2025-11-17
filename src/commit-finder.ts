@@ -11,7 +11,9 @@ export const getLatestCommitSHA = (): string | null => {
     '.gh-header-meta, .commit-tease, [data-test-selector="pr-header-actions"], .gh-header-actions'
   );
   if (prHeader) {
-    const headerLinks = Array.from(prHeader.querySelectorAll('a[href*="/commit"]'));
+    const headerLinks = Array.from(
+      prHeader.querySelectorAll('a[href*="/commit"]')
+    );
     for (const link of headerLinks) {
       const href = link.getAttribute("href");
       const sha = extractSHAFromHref(href);
@@ -24,7 +26,9 @@ export const getLatestCommitSHA = (): string | null => {
   // Method 2: Find commits in the timeline/commits list
   // GitHub shows commits in chronological order, newest first
   // Look for both /commit/ and /commits/ patterns
-  const allCommitLinks = Array.from(document.querySelectorAll('a[href*="/commit"]'));
+  const allCommitLinks = Array.from(
+    document.querySelectorAll('a[href*="/commit"]')
+  );
   const seenSHAs = new Set<string>();
   const commitsInTimeline: CommitElement[] = [];
 
@@ -132,4 +136,3 @@ export const findCommitHashes = (): CommitElement[] => {
 
   return elements;
 };
-

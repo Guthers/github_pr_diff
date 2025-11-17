@@ -4,7 +4,8 @@ declare const browser: typeof chrome | undefined;
 document.addEventListener("DOMContentLoaded", () => {
   // Check if user is on a GitHub PR page
   // Use browser API (Firefox) or chrome API (Chrome/Edge)
-  const browserAPI: typeof chrome = typeof browser !== "undefined" ? browser : chrome;
+  const browserAPI: typeof chrome =
+    typeof browser !== "undefined" ? browser : chrome;
 
   if (browserAPI && browserAPI.tabs) {
     browserAPI.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -23,4 +24,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-

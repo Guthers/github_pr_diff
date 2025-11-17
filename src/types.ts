@@ -10,4 +10,3 @@ export interface CommitElement {
   sha: string;
   element: HTMLAnchorElement;
 }
-

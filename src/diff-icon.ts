@@ -3,7 +3,11 @@
 import type { PRInfo } from "./types";
 
 // Create diff icon element
-export const createDiffIcon = (commitSHA: string, latestSHA: string, prInfo: PRInfo): HTMLAnchorElement => {
+export const createDiffIcon = (
+  commitSHA: string,
+  latestSHA: string,
+  prInfo: PRInfo
+): HTMLAnchorElement => {
   const icon = document.createElement("a");
   icon.href = "#";
   icon.className = "github-diff-icon";
@@ -48,4 +52,3 @@ export const createDiffIcon = (commitSHA: string, latestSHA: string, prInfo: PRI
 
   return icon;
 };
-

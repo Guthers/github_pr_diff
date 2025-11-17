@@ -1,0 +1,21 @@
+#!/bin/sh
+# Pre-commit hook to run Biome linter
+
+echo "Running Biome linter..."
+
+# Run biome check
+pnpm run check
+
+# Capture exit code
+EXIT_CODE=$?
+
+if [ $EXIT_CODE -ne 0 ]; then
+  echo ""
+  echo "❌ Biome check failed. Please fix the issues above before committing."
+  echo "You can run 'pnpm run check:write' to auto-fix some issues."
+  exit 1
+fi
+
+echo "✅ Biome check passed!"
+exit 0
+

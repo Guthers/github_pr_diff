@@ -4,7 +4,9 @@ import type { PRInfo } from "./types";
 
 // Check if we're on a GitHub PR page
 export const isPRPage = (): boolean => {
-  return window.location.pathname.match(/^\/[^\/]+\/[^\/]+\/pull\/\d+/) !== null;
+  return (
+    window.location.pathname.match(/^\/[^\/]+\/[^\/]+\/pull\/\d+/) !== null
+  );
 };
 
 // Extract owner, repo, and PR number from URL
@@ -42,4 +44,3 @@ export const extractSHAFromHref = (href: string | null): string | null => {
   }
   return null;
 };
-

@@ -1,9 +1,9 @@
 // GitHub PR Diff Extension - Content Script
 // Adds diff icons next to commit hashes on GitHub pull request pages
 
-import { isPRPage, getPRInfo } from "./utils";
-import { getLatestCommitSHA, findCommitHashes } from "./commit-finder";
+import { findCommitHashes, getLatestCommitSHA } from "./commit-finder";
 import { createDiffIcon } from "./diff-icon";
+import { getPRInfo, isPRPage } from "./utils";
 
 // Add diff icons to commit hashes
 const addDiffIcons = (): void => {
