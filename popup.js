@@ -1,7 +1,5 @@
 // GitHub PR Diff Extension - Popup Script
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('GitHub PR Diff Extension popup loaded');
-  
   // Check if user is on a GitHub PR page
   // Use browser API (Firefox) or chrome API (Chrome/Edge)
   const browserAPI = typeof browser !== 'undefined' ? browser : chrome;

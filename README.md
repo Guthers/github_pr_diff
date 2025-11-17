@@ -1,6 +1,6 @@
 # GitHub PR Diff Extension
 
-A Firefox extension that adds diff icons next to commit hashes on GitHub pull request pages, allowing you to quickly view the diff between any commit and the latest commit in the PR.
+A browser extension (Firefox & Chrome) that adds diff icons next to commit hashes on GitHub pull request pages, allowing you to quickly view the diff between any commit and the latest commit in the PR.
 
 ## Features
 
@@ -12,7 +12,9 @@ A Firefox extension that adds diff icons next to commit hashes on GitHub pull re
 
 ## Installation
 
-### Temporary Installation (for development/testing)
+### Firefox
+
+#### Temporary Installation (for development/testing)
 
 1. Open Firefox and navigate to `about:debugging`
 2. Click on "This Firefox" in the left sidebar
@@ -20,23 +22,45 @@ A Firefox extension that adds diff icons next to commit hashes on GitHub pull re
 4. Navigate to this directory and select the `manifest.json` file
 5. The extension should now appear in your extensions list and toolbar
 
-### Permanent Installation (for distribution)
+#### Permanent Installation
 
 1. Package the extension:
    ```bash
-   zip -r github-pr-diff-extension.zip . -x "*.git*" "*.md" "generate_icons.py"
+   zip -r github-pr-diff-extension.xpi . -x "*.git*" "*.md" "*.py"
    ```
 
 2. In Firefox, go to `about:addons`
 3. Click the gear icon and select "Install Add-on From File..."
-4. Select the `github-pr-diff-extension.zip` file
+4. Select the `github-pr-diff-extension.xpi` file
+
+### Chrome / Chromium / Edge
+
+#### Developer Mode Installation
+
+1. Open Chrome and navigate to `chrome://extensions/`
+2. Enable "Developer mode" (toggle in the top right)
+3. Click "Load unpacked"
+4. Navigate to this directory and select it
+5. The extension should now appear in your extensions list
+
+#### Packaged Installation
+
+1. Package the extension:
+   ```bash
+   zip -r github-pr-diff-extension.zip . -x "*.git*" "*.md" "*.py"
+   ```
+
+2. In Chrome, go to `chrome://extensions/`
+3. Enable "Developer mode"
+4. Click "Load unpacked" and select the extracted folder, OR
+5. Drag and drop the `.zip` file onto the extensions page (Chrome will extract it)
 
 ## Usage
 
 1. Navigate to any GitHub pull request page (e.g., `https://github.com/owner/repo/pull/123`)
 2. You'll see 🔀 icons appear next to commit hashes throughout the page
 3. Click any 🔀 icon to open a new tab showing the diff between that commit and the latest commit in the PR
-4. The diff opens in GitHub's compare view: `https://github.com/owner/repo/compare/{commit}...{latest}`
+4. The diff opens in GitHub's PR files view: `https://github.com/owner/repo/pull/{PR_NUMBER}/files/{commit}..{latest}`
 
 ## Testing
 
@@ -58,16 +82,8 @@ github_extension/
 │   ├── icon-32.png
 │   ├── icon-48.png
 │   └── icon-128.png
-├── generate_icons.py  # Script to generate icons
 ├── LICENSE            # MIT License
 └── README.md          # This file
-```
-
-## Development
-
-To regenerate icons, run:
-```bash
-python3 generate_icons.py
 ```
 
 ## How It Works
@@ -83,10 +99,11 @@ The extension uses a MutationObserver to handle GitHub's dynamically loaded cont
 
 ## Technical Details
 
-- **Manifest V3** compatible
+- **Manifest V3** compatible (works on both Firefox and Chrome)
 - Uses content scripts to modify GitHub pages
 - Requires `tabs` permission to open new tabs
 - Requires `host_permissions` for `https://github.com/*`
+- Cross-browser compatible (handles both `browser` and `chrome` APIs)
 
 ## License
 

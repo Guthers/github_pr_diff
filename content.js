@@ -53,7 +53,6 @@
         const href = link.getAttribute('href');
         const sha = extractSHAFromHref(href);
         if (sha) {
-          console.log('GitHub Diff Extension: Found latest commit in header:', sha.substring(0, 7));
           return sha;
         }
       }
@@ -83,14 +82,12 @@
     
     // Return the first commit in timeline (newest)
     if (commitsInTimeline.length > 0) {
-      console.log('GitHub Diff Extension: Found latest commit in timeline:', commitsInTimeline[0].sha.substring(0, 7));
       return commitsInTimeline[0].sha;
     }
     
     // Method 3: Fallback - get the first commit SHA found anywhere (if only one commit)
     if (seenSHAs.size === 1) {
       const firstSHA = Array.from(seenSHAs)[0];
-      console.log('GitHub Diff Extension: Only one commit found, using as latest:', firstSHA.substring(0, 7));
       return firstSHA;
     }
     
@@ -104,7 +101,6 @@
           const href = sectionLinks[0].getAttribute('href');
           const sha = extractSHAFromHref(href);
           if (sha) {
-            console.log('GitHub Diff Extension: Found latest commit in commits section:', sha.substring(0, 7));
             return sha;
           }
         }
@@ -114,7 +110,6 @@
       const href = allCommitLinks[0].getAttribute('href');
       const sha = extractSHAFromHref(href);
       if (sha) {
-        console.log('GitHub Diff Extension: Using first commit found as latest (fallback):', sha.substring(0, 7));
         return sha;
       }
     }
@@ -153,7 +148,6 @@
     
     // Find all commit links, but filter to only hash links (not message links)
     const allCommitLinks = document.querySelectorAll('a[href*="/commit"]');
-    console.log('GitHub Diff Extension: Found', allCommitLinks.length, 'commit links on page');
     
     allCommitLinks.forEach(link => {
       const href = link.getAttribute('href');
@@ -168,7 +162,6 @@
       }
     });
     
-    console.log('GitHub Diff Extension: Unique commit hash links found:', elements.length);
     return elements;
   }
 
@@ -212,8 +205,6 @@
       // This shows the files changed in the PR from a specific commit to the latest
       const diffUrl = `https://github.com/${prInfo.owner}/${prInfo.repo}/pull/${prInfo.prNumber}/files/${commitSHA}..${latestSHA}`;
       
-      console.log('GitHub Diff Extension: Opening diff URL for code review:', diffUrl);
-      
       // Open in new tab
       window.open(diffUrl, '_blank');
     });
@@ -223,48 +214,31 @@
 
   // Add diff icons to commit hashes
   function addDiffIcons() {
-    console.log('GitHub Diff Extension: Running addDiffIcons()');
-    
     if (!isPRPage()) {
-      console.log('GitHub Diff Extension: Not a PR page');
       return;
     }
     
     const prInfo = getPRInfo();
     if (!prInfo) {
-      console.log('GitHub Diff Extension: Could not extract PR info');
       return;
     }
-    
-    console.log('GitHub Diff Extension: PR Info:', prInfo);
     
     const latestSHA = getLatestCommitSHA();
     if (!latestSHA) {
-      console.log('GitHub Diff Extension: Could not find latest commit SHA');
-      console.log('GitHub Diff Extension: Debug - Found commit links:', document.querySelectorAll('a[href*="/commit/"]').length);
       return;
     }
     
-    console.log('GitHub Diff Extension: Latest commit SHA:', latestSHA.substring(0, 7));
-    
     const commitElements = findCommitHashes();
-    console.log('GitHub Diff Extension: Found', commitElements.length, 'commit hash(es)');
-    
-    let addedCount = 0;
-    let skippedLatest = 0;
-    let skippedExisting = 0;
     
     commitElements.forEach(({ sha, element }) => {
       // Skip if this is the latest commit (no diff needed)
       if (sha === latestSHA) {
-        skippedLatest++;
         return;
       }
       
       // Skip if icon already added to this specific element
       // Check if there's already an icon right after this element
       if (element.nextSibling && element.nextSibling.classList && element.nextSibling.classList.contains('github-diff-icon')) {
-        skippedExisting++;
         return;
       }
       
@@ -272,7 +246,6 @@
       if (element.parentElement) {
         const existingIcon = element.parentElement.querySelector(`.github-diff-icon[data-commit-sha="${sha}"]`);
         if (existingIcon) {
-          skippedExisting++;
           return;
         }
       }
@@ -285,33 +258,17 @@
       if (element.parentElement) {
         // Insert right after the element
         element.parentElement.insertBefore(icon, element.nextSibling);
-        addedCount++;
-        console.log('GitHub Diff Extension: Added icon for commit', sha.substring(0, 7));
-      } else {
-        console.log('GitHub Diff Extension: Warning - element has no parent, cannot add icon');
       }
     });
-    
-    if (addedCount > 0) {
-      console.log(`GitHub Diff Extension: Successfully added ${addedCount} diff icon(s)`);
-    } else if (commitElements.length > 0) {
-      console.log(`GitHub Diff Extension: No icons added. Stats: ${skippedLatest} latest (skipped), ${skippedExisting} existing (skipped), ${commitElements.length} total commits`);
-    } else {
-      console.log('GitHub Diff Extension: No commit hashes found on page');
-    }
   }
 
   // Initialize the extension
-  console.log('GitHub Diff Extension: Content script loaded');
-  
   // Run on page load
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-      console.log('GitHub Diff Extension: DOM loaded, waiting for GitHub content...');
       setTimeout(addDiffIcons, 2000); // Wait for GitHub's dynamic content
     });
   } else {
-    console.log('GitHub Diff Extension: DOM already loaded, waiting for GitHub content...');
     setTimeout(addDiffIcons, 2000);
   }
 
