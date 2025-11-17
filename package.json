@@ -4,7 +4,7 @@
   "description": "A browser extension that adds diff icons next to commit hashes on GitHub pull request pages",
   "private": true,
   "scripts": {
-    "build": "tsc && pnpm run bundle:content && pnpm run bundle:popup",
+    "build": "tsc --noEmit && pnpm run bundle:content && pnpm run bundle:popup",
     "bundle:content": "esbuild src/content.ts --bundle --format=iife --outfile=build/content.js --target=es2020",
     "bundle:popup": "esbuild src/popup.ts --bundle --format=iife --outfile=build/popup.js --target=es2020",
     "watch": "tsc --watch",
