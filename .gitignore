@@ -9,10 +9,7 @@ yarn.lock
 *.zip
 dist/
 build/
-
-# Compiled TypeScript files (generated from src/)
-content.js
-popup.js
+build-ts/
 
 # IDE and editor files
 .vscode/
