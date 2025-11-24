@@ -5,6 +5,31 @@ import { findCommitHashes, getLatestCommitSHA } from "./commit-finder";
 import { createDiffIcon, createLatestCommitIcon } from "./diff-icon";
 import { getPRInfo, isPRPage } from "./utils";
 
+// Track the previous latest SHA to detect changes
+let previousLatestSHA: string | null = null;
+
+
+const _removePreviousIcon = (element: Element, selector: string): void => {
+  const existingIcon = element.querySelector(selector);
+  if (existingIcon) existingIcon.remove();
+};
+
+
+const removePreviousIcon = (element: Element | null, commitSHA: string, iconType: 'diff' | 'latest' | 'both'): void => {
+  // Remove the previous icon(s) for this commit
+  // This is important to avoid duplicate icons when the latest commit changes
+  // and when new commits are added
+  if (!element) return;
+  
+  if (iconType === 'diff' || iconType === 'both') {
+    _removePreviousIcon(element, `.github-diff-icon[data-commit-sha="${commitSHA}"]`);  
+  }
+  
+  if (iconType === 'latest' || iconType === 'both') {
+    _removePreviousIcon(element, `.github-latest-icon[data-commit-sha="${commitSHA}"]`);
+  }
+};
+
 // Add diff icons to commit hashes
 const addDiffIcons = (): void => {
   if (!isPRPage()) {
@@ -16,10 +41,17 @@ const addDiffIcons = (): void => {
     return;
   }
 
+  // Re-determine the latest commit SHA (important when new commits are added)
   const latestSHA = getLatestCommitSHA();
   if (!latestSHA) {
     return;
   }
+
+  // If the latest SHA has changed, remove icons for the previous latest commit
+  if (previousLatestSHA !== null && previousLatestSHA !== latestSHA) {
+    removePreviousIcon(document.body, previousLatestSHA, 'both');
+  }
+  previousLatestSHA = latestSHA;
 
   const commitElements = findCommitHashes();
 
@@ -45,6 +77,9 @@ const addDiffIcons = (): void => {
           return;
         }
       }
+
+      // Remove any existing diff icon for this commit (in case it was previously not the latest)
+      removePreviousIcon(element.parentElement, sha, 'diff');
 
       // Add latest commit icon
       const icon = createLatestCommitIcon(sha);
@@ -77,6 +112,9 @@ const addDiffIcons = (): void => {
         return;
       }
     }
+
+    // Remove any existing latest icon for this commit (in case it was previously the latest)
+    removePreviousIcon(element.parentElement, sha, 'latest');
 
     // Add icon next to the commit element
     const icon = createDiffIcon(sha, latestSHA, prInfo);
